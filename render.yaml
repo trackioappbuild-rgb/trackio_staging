@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: trackio-staging
+    runtime: node
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health/database
+    envVars:
+      - key: DATABASE_URL
+        sync: false
