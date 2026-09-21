@@ -1,7 +1,8 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
+    const prisma = getPrisma();
     await prisma.$queryRaw`SELECT 1`;
 
     return Response.json({ database: "connected" });

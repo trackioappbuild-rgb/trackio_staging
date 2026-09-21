@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Trackio
 
-## Getting Started
+Trackio is a Next.js application backed by PostgreSQL on Neon through Prisma.
 
-First, run the development server:
+## Requirements
+
+- Node.js 24 (see `.nvmrc`)
+- A Neon project and database
+
+## Local setup
+
+1. Install the configured Node.js version and dependencies:
+
+   ```bash
+   nvm use
+   npm ci
+   ```
+
+2. Create the local environment file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+3. In the Neon console, open **Connect**, copy the pooled PostgreSQL connection
+   string, and assign it to `DATABASE_URL` in `.env`. Keep the value quoted if
+   its password contains special characters. `.env` is ignored by Git and must
+   never be committed.
+
+4. Verify the schema and generate the Prisma client:
+
+   ```bash
+   npm run db:validate
+   npm run db:generate
+   ```
+
+5. Start the application:
+
+   ```bash
+   npm run dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Database workflow
+
+Edit `prisma/schema.prisma`, then create and apply a development migration:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run db:migrate -- --name describe_the_change
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Production and CI environments should apply committed migrations with:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run db:deploy
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The shared Prisma client is exported from `src/lib/prisma.ts`. Import it only
+from server-side code such as Server Components, Server Actions, and Route
+Handlers; never expose `DATABASE_URL` to browser code.
 
-## Learn More
+## Deploy to Render
 
-To learn more about Next.js, take a look at the following resources:
+The included `render.yaml` contains the build, start, and database health-check
+settings. In Render:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Choose **New > Blueprint** and connect this GitHub repository.
+2. When prompted for `DATABASE_URL`, paste the pooled Neon connection string.
+3. Deploy the Blueprint.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Render runs `npm ci && npm run build`; the build generates the Prisma client
+before compiling Next.js. After deployment, `/api/health/database` returns
+`{"database":"connected"}` when Render can reach Neon.
 
-## Deploy on Vercel
+The repository contains only `.env.example`. Never put the real connection
+string in `render.yaml`, a GitHub Actions workflow, or a Git commit.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Checks
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npm run build
+```
