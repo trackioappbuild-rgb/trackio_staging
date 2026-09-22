@@ -1,7 +1,34 @@
-import Link from "next/link";
 import { AdminShell } from "@/components/admin-shell";
+import {
+  AlertsPanel,
+  DashboardHeader,
+  FleetOverview,
+  LiveMap,
+  RecentActivity,
+  StatGrid,
+  TodaysTrips,
+} from "@/components/dashboard/dashboard-sections";
+import "./dashboard.css";
 
-const stats=[["Active Trips","12","Live now"],["Upcoming Trips","5","Next 2 hours"],["Students In Transit","248","Across all trips"],["Vehicles On Road","12","Live tracking"],["Important Alerts","3","Requires attention"]];
-const trips=[["Morning Trip 1","Bus 12A","Ramesh Kumar","14 / 18 Students"],["Morning Trip 2","Bus 14B","Suresh Babu","16 / 20 Students"],["Afternoon Trip 1","Bus 11C","Arun Kumar","20 / 22 Students"]];
+export default function Home() {
+  return (
+    <AdminShell active="Dashboard">
+      <main className="dash-page">
+        <div className="dash-layout">
+          <div className="dash-primary">
+            <DashboardHeader />
+            <StatGrid />
+            <LiveMap />
+            <TodaysTrips />
+          </div>
 
-export default function Home(){return <AdminShell active="Dashboard"><main className="home-dashboard"><section><div className="welcome"><div><h1>Good morning, Sarah! 👋</h1><p>Here&apos;s what&apos;s happening with Aegis Academy today.</p></div><span>Wednesday, 22 May 2024<br/>7:32 AM</span></div><div className="home-stats">{stats.map(([a,b,c],i)=><article key={a}><i>{["▣","◷","♙","▱","!"][i]}</i><div><small>{a}</small><strong>{b}</strong></div><p>● {c}</p></article>)}</div><section className="live-map"><header><h2>Live Map <b>● Live</b></h2><button>View Full Map ↗</button></header><svg viewBox="0 0 800 300"><path d="M10 140 C120 80 210 180 330 120 S510 70 590 190 S700 210 790 100"/><path d="M20 250 C180 220 260 270 380 180 S600 50 780 210"/></svg><span className="pin p-a">⌂</span><span className="pin p-b">▱</span><span className="pin p-c">▱</span><aside><h3>Bus 12A <b>● Live</b></h3><small>Driver</small><strong>Ramesh Kumar</strong><small>Route</small><strong>Morning Route A</strong><small>Next Stop</small><strong>3rd Main, Koramangala</strong><small>ETA</small><em>7 min</em></aside></section><section className="today"><header><h2>Today&apos;s Trips</h2><Link href="/trips/new">Create trip →</Link></header><div>{trips.map(([a,b,c,d])=><article key={a}><h3>{a}<b>● Live</b></h3><p>06:30 AM – 08:30 AM</p><strong>{b}</strong><span>{c}</span><strong>Morning Route A</strong><span>{d}</span><button>View Trip</button><button>Replace Driver</button></article>)}</div></section></section><aside className="home-side"><section><h2>Alerts <Link href="/alerts">View all</Link></h2>{["Trip Delayed","GPS Signal Weak","Guest Pickup Request"].map((x,i)=><article key={x}><i>{i===0?"◷":i===1?"△":"♙"}</i><div><strong>{x}</strong><p>{i===0?"Morning Trip 1 is delayed by 7 minutes.":"Requires your attention"}</p></div><time>7:2{i} AM</time></article>)}</section><section><h2>Recent Activity</h2>{["Liam Johnson boarded Bus 12A","Noah Brown marked absent","Bus 12A reached Central School"].map(x=><article key={x}><i>✓</i><div><strong>{x}</strong><p>Morning Route A</p></div></article>)}</section><section><h2>Fleet Overview</h2><div className="fleet-mini"><div><strong>12</strong><small>Total Vehicles</small></div><p>● On Route &nbsp; 12<br/>● Idle &nbsp; 5<br/>● Maintenance &nbsp; 2</p></div></section></aside></main></AdminShell>}
+          <aside className="dash-sidebar" aria-label="Dashboard updates">
+            <AlertsPanel />
+            <RecentActivity />
+            <FleetOverview />
+          </aside>
+        </div>
+      </main>
+    </AdminShell>
+  );
+}
