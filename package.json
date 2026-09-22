@@ -14,7 +14,8 @@
     "db:validate": "prisma validate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "publish:staging": "bash scripts/publish.sh"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.0",
@@ -36,8 +37,5 @@
     "prisma": "^7.10.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "engines": {
-    "node": "24.x"
   }
 }

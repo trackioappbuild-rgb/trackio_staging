@@ -2,9 +2,15 @@ services:
   - type: web
     name: trackio-staging
     runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    autoDeployTrigger: checksPass
     buildCommand: npm ci && npm run build
-    startCommand: npm start
+    startCommand: npm run db:deploy && npm start
     healthCheckPath: /api/health/database
     envVars:
       - key: DATABASE_URL
         sync: false
+      - key: NODE_ENV
+        value: production

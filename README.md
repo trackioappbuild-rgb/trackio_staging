@@ -82,3 +82,18 @@ string in `render.yaml`, a GitHub Actions workflow, or a Git commit.
 npm run lint
 npm run build
 ```
+
+## Automated staging workflow
+
+After the one-time GitHub, Neon, and Render connection is complete, publish a
+local change with:
+
+```bash
+npm run publish:staging -- "Describe the change"
+```
+
+You can also double-click `publish.command` in Finder. The helper synchronizes
+`main`, installs locked dependencies, validates Prisma, lints, builds, commits,
+and pushes. GitHub Actions verifies the pushed commit again. Render deploys only
+after those checks pass, then applies committed Prisma migrations before the
+application starts.
