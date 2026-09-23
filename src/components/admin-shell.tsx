@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 const links = [
-  ["⌂", "Dashboard", "/"], ["⌘", "Trips", "/trips/new"], ["♙", "Students", "/students/new"],
+  ["⌂", "Dashboard", "/"], ["⌘", "Trips", "/trips"], ["♙", "Students", "/students/new"],
   ["♧", "Parents & Guardians", "#"], ["▣", "Drivers", "/drivers/new"], ["▱", "Vehicles", "#"],
   ["⌘", "Routes & Stops", "#"], ["⌁", "Live Operations", "#"], ["♧", "Alerts", "/alerts"],
   ["✓", "Reports", "#"], ["⚙", "Settings", "/settings"],
